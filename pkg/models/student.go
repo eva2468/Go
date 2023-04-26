@@ -8,7 +8,8 @@ import (
 var db *gorm.DB
 
 type Student struct {
-	gorm.Model
+	//gorm.Model
+	ID   uint   `gorm:"primarykey";autoIncrement:true;`
 	Name string `gorm:""json:"name"`
 	Age  int64  `json: "age" `
 }
@@ -39,10 +40,11 @@ func GetStudentById(id int64) (*Student, *gorm.DB) {
 	return &getStudent, db
 }
 
-func DeleteStudent(id int64) Student {
+func DeleteStudent(id int64) (*Student, *gorm.DB) {
 
-	var student Student
+	var student, getstudent Student
+	db := db.Where("ID=?", id).Find(&getstudent)
 	db.Where("id=?", id).Delete(&student)
-	return student
+	return &getstudent, db
 
 }

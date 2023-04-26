@@ -1,0 +1,34 @@
+version: '3'
+services:
+    db:
+        container_name: student_go_db
+        image: 'mysql:8.0'
+        environment: 
+            - MYSQL_DATABASE=springboot_sample
+            - MYSQL_PASSWORD=abhishekev123
+            - MYSQL_ROOT_PASSWORD=abhishekev123
+            - DATABASE_HOST=db
+            - LC_ALL=C.UTF-8
+            - LANG=C.UTF-8
+        ports:
+            - "3307:3306"
+        volumes:
+            - ./data:/lib/mysql
+            - ./sql:/docker-entrypoint-initdb.d
+    api:
+        build: .
+        depends_on: 
+            - db
+        links:
+            - db
+        environment: 
+            - DB_HOST=db
+            - DB_PORT=3306
+            - DB_NAME=springboot_sample
+            - DB_USER=root
+            - DB_PASS=abhishekev123
+        ports:
+            - 8080:8080
+
+
+
